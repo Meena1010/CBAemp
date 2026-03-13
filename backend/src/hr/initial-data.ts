@@ -1,0 +1,655 @@
+export type Department = { id: string; name: string };
+export type Designation = { id: string; name: string; deptId: string };
+
+export type EmployeeRole = 'admin' | 'manager' | 'employee' | 'hr';
+
+export type Employee = {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  address: string;
+  dob: string;
+  joiningDate: string;
+  departmentId: string;
+  designationId: string;
+  managerId: string | null;
+  role: EmployeeRole;
+  salary: number;
+  status: 'active' | 'inactive';
+  emergencyContact: string;
+  avatar: string;
+};
+
+export type LeaveBalance = {
+  CL: number;
+  SL: number;
+  PL: number;
+};
+
+export type LeaveApplicationStatus = 'pending' | 'approved' | 'rejected' | 'revoked';
+
+export type LeaveApplication = {
+  id: string;
+  employeeId: string;
+  type: 'CL' | 'SL' | 'PL';
+  fromDate: string;
+  toDate: string;
+  reason: string;
+  status: LeaveApplicationStatus;
+  managerComment: string;
+  appliedOn: string;
+};
+
+export type HolidayType = 'national' | 'festival';
+
+export type Holiday = {
+  id: string;
+  name: string;
+  date: string;
+  type: HolidayType | string;
+};
+
+export type ReviewStatus = 'submitted' | 'reviewed';
+
+export type PerformanceReview = {
+  id: string;
+  employeeId: string;
+  year: number;
+  status: ReviewStatus;
+  deliverables: string;
+  accomplishments: string;
+  improvements: string;
+  selfRating: number;
+  managerFeedback: string;
+  managerRating: number | null;
+  submittedOn: string;
+  reviewedOn: string | null;
+};
+
+export type GoalStatus = 'in_progress' | 'completed';
+export type GoalPriority = 'high' | 'medium' | 'low';
+
+export type Goal = {
+  id: string;
+  employeeId: string;
+  description: string;
+  deadline: string;
+  priority: GoalPriority | string;
+  successMetrics: string;
+  progress: number;
+  status: GoalStatus;
+  year: number;
+};
+
+export type AttendanceStatus = 'present' | 'absent' | 'half_day';
+
+export type AttendanceRecord = {
+  id: string;
+  employeeId: string;
+  date: string;
+  checkIn: string | null;
+  checkOut: string | null;
+  status: AttendanceStatus;
+};
+
+export type Training = {
+  id: string;
+  title: string;
+  category: string;
+  mode: 'online' | 'offline' | 'hybrid' | string;
+  startDate: string;
+  endDate: string;
+  mandatory: boolean;
+  description: string;
+};
+
+export type TrainingEnrollmentStatus =
+  | 'enrolled'
+  | 'in_progress'
+  | 'completed'
+  | 'cancelled';
+
+export type TrainingEnrollment = {
+  id: string;
+  trainingId: string;
+  employeeId: string;
+  status: TrainingEnrollmentStatus;
+  progress: number;
+};
+
+export type OnboardingTaskOwner = 'hr' | 'manager' | 'employee';
+
+export type OnboardingTask = {
+  id: string;
+  label: string;
+  owner: OnboardingTaskOwner;
+};
+
+export type OnboardingTemplate = {
+  id: string;
+  name: string;
+  departmentId: string | null;
+  tasks: OnboardingTask[];
+};
+
+export type OnboardingInstanceStatus =
+  | 'in_progress'
+  | 'completed'
+  | 'cancelled';
+
+export type OnboardingInstanceTask = OnboardingTask & {
+  completed: boolean;
+  completedBy?: string;
+  completedOn?: string;
+};
+
+export type OnboardingInstance = {
+  id: string;
+  employeeId: string;
+  templateId: string;
+  status: OnboardingInstanceStatus;
+  startedOn: string;
+  completedOn: string | null;
+  tasks: OnboardingInstanceTask[];
+};
+
+export type OffboardingStatus =
+  | 'requested'
+  | 'approved'
+  | 'rejected'
+  | 'completed';
+
+export type OffboardingRequest = {
+  id: string;
+  employeeId: string;
+  requestedLastDay: string;
+  reason: string;
+  status: OffboardingStatus;
+  decisionComment: string;
+  createdOn: string;
+  updatedOn: string;
+};
+
+export type OffboardingChecklistTaskOwner =
+  | 'hr'
+  | 'manager'
+  | 'it'
+  | 'finance'
+  | 'employee';
+
+export type OffboardingChecklistTask = {
+  id: string;
+  label: string;
+  owner: OffboardingChecklistTaskOwner;
+  completed: boolean;
+  completedBy?: string;
+  completedOn?: string;
+};
+
+export type OffboardingChecklist = {
+  id: string;
+  employeeId: string;
+  requestId: string;
+  tasks: OffboardingChecklistTask[];
+};
+
+export type NotificationType =
+  | 'leave_approved'
+  | 'leave_applied'
+  | 'review_submitted'
+  | 'review_feedback'
+  | 'leave_rejected'
+  | 'leave_revoked'
+  | 'birthday_reminder'
+  | 'anniversary_reminder'
+  | string;
+
+export type Notification = {
+  id: string;
+  userId: string;
+  type: NotificationType;
+  message: string;
+  read: boolean;
+  createdAt: string;
+};
+
+export type AnnouncementPriority = 'high' | 'medium' | 'low';
+
+export type Announcement = {
+  id: string;
+  title: string;
+  content: string;
+  date: string;
+  priority: AnnouncementPriority | string;
+};
+
+export type ReviewConfig = {
+  activeYear: number;
+  years: number[];
+};
+
+export type HrStore = {
+  reviewConfig: ReviewConfig;
+  departments: Department[];
+  designations: Designation[];
+  employees: Employee[];
+  leaveBalances: Record<string, LeaveBalance>;
+  leaveApplications: LeaveApplication[];
+  holidays: Holiday[];
+  performanceReviews: PerformanceReview[];
+  goals: Goal[];
+  notifications: Notification[];
+  announcements: Announcement[];
+  attendanceRecords: AttendanceRecord[];
+  trainings: Training[];
+  trainingEnrollments: TrainingEnrollment[];
+  onboardingTemplates: OnboardingTemplate[];
+  onboardingInstances: OnboardingInstance[];
+  offboardingRequests: OffboardingRequest[];
+  offboardingChecklists: OffboardingChecklist[];
+};
+
+// Initial data ported from the frontend dataStore.js
+export const initialData: HrStore = {
+  reviewConfig: {
+    activeYear: 2026,
+    years: [2024, 2025, 2026],
+  },
+  departments: [
+    { id: 'dept-1', name: 'Engineering' },
+    { id: 'dept-2', name: 'Human Resources' },
+    { id: 'dept-3', name: 'Finance' },
+    { id: 'dept-4', name: 'Marketing' },
+    { id: 'dept-5', name: 'Operations' },
+    { id: 'dept-6', name: 'Product' },
+  ],
+  designations: [
+    { id: 'des-1', name: 'Software Engineer', deptId: 'dept-1' },
+    { id: 'des-2', name: 'Senior Software Engineer', deptId: 'dept-1' },
+    { id: 'des-3', name: 'Engineering Manager', deptId: 'dept-1' },
+    { id: 'des-4', name: 'HR Executive', deptId: 'dept-2' },
+    { id: 'des-5', name: 'HR Manager', deptId: 'dept-2' },
+    { id: 'des-6', name: 'Finance Analyst', deptId: 'dept-3' },
+    { id: 'des-7', name: 'Marketing Specialist', deptId: 'dept-4' },
+    { id: 'des-8', name: 'Operations Lead', deptId: 'dept-5' },
+    { id: 'des-9', name: 'Product Manager', deptId: 'dept-6' },
+    { id: 'des-10', name: 'Admin', deptId: 'dept-2' },
+  ],
+  employees: [
+    {
+      id: 'EMP001',
+      name: 'Admin User',
+      email: 'admin@revworkforce.com',
+      password: 'admin123',
+      phone: '9876543210',
+      address: '1 Corporate Tower, Bangalore',
+      dob: '1985-03-15',
+      joiningDate: '2018-01-01',
+      departmentId: 'dept-2',
+      designationId: 'des-10',
+      managerId: null,
+      role: 'admin',
+      salary: 150000,
+      status: 'active',
+      emergencyContact: '9876543211',
+      avatar: 'AU',
+    },
+    {
+      id: 'EMP002',
+      name: 'Sarah Mitchell',
+      email: 'sarah.mitchell@revworkforce.com',
+      password: 'password123',
+      phone: '9876543212',
+      address: '23 MG Road, Bangalore',
+      dob: '1988-07-22',
+      joiningDate: '2020-03-15',
+      departmentId: 'dept-1',
+      designationId: 'des-3',
+      managerId: 'EMP001',
+      role: 'manager',
+      salary: 120000,
+      status: 'active',
+      emergencyContact: '9876543213',
+      avatar: 'SM',
+    },
+    {
+      id: 'EMP003',
+      name: 'James Carter',
+      email: 'james.carter@revworkforce.com',
+      password: 'password123',
+      phone: '9876543214',
+      address: '45 Whitefield, Bangalore',
+      dob: '1992-11-08',
+      joiningDate: '2021-06-01',
+      departmentId: 'dept-1',
+      designationId: 'des-1',
+      managerId: 'EMP002',
+      role: 'employee',
+      salary: 75000,
+      status: 'active',
+      emergencyContact: '9876543215',
+      avatar: 'JC',
+    },
+    {
+      id: 'EMP004',
+      name: 'Priya Sharma',
+      email: 'priya.sharma@revworkforce.com',
+      password: 'password123',
+      phone: '9876543216',
+      address: '67 Koramangala, Bangalore',
+      dob: '1994-02-14',
+      joiningDate: '2022-01-10',
+      departmentId: 'dept-1',
+      designationId: 'des-2',
+      managerId: 'EMP002',
+      role: 'employee',
+      salary: 95000,
+      status: 'active',
+      emergencyContact: '9876543217',
+      avatar: 'PS',
+    },
+    {
+      id: 'EMP005',
+      name: 'Rahul Verma',
+      email: 'rahul.verma@revworkforce.com',
+      password: 'password123',
+      phone: '9876543218',
+      address: '89 HSR Layout, Bangalore',
+      dob: '1990-05-30',
+      joiningDate: '2019-08-20',
+      departmentId: 'dept-4',
+      designationId: 'des-7',
+      managerId: null,
+      role: 'employee',
+      salary: 65000,
+      status: 'active',
+      emergencyContact: '9876543219',
+      avatar: 'RV',
+    },
+    {
+      id: 'EMP006',
+      name: 'Lisa Wang',
+      email: 'lisa.wang@revworkforce.com',
+      password: 'password123',
+      phone: '9876543220',
+      address: '12 Indiranagar, Bangalore',
+      dob: '1991-09-19',
+      joiningDate: '2021-11-01',
+      departmentId: 'dept-3',
+      designationId: 'des-6',
+      managerId: 'EMP001',
+      role: 'employee',
+      salary: 80000,
+      status: 'active',
+      emergencyContact: '9876543221',
+      avatar: 'LW',
+    },
+    {
+      id: 'EMP007',
+      name: 'Ananya Nair',
+      email: 'ananya.nair@revworkforce.com',
+      password: 'hr@1234',
+      phone: '9876543222',
+      address: '34 Sadashivanagar, Bangalore',
+      dob: '1989-06-12',
+      joiningDate: '2019-04-01',
+      departmentId: 'dept-2',
+      designationId: 'des-5',
+      managerId: 'EMP001',
+      role: 'hr',
+      salary: 110000,
+      status: 'active',
+      emergencyContact: '9876543223',
+      avatar: 'AN',
+    },
+    {
+      id: 'EMP008',
+      name: 'Vikram Iyer',
+      email: 'vikram.iyer@revworkforce.com',
+      password: 'password123',
+      phone: '9876543224',
+      address: '21 JP Nagar, Bangalore',
+      dob: '1990-03-08',
+      joiningDate: '2020-03-08',
+      departmentId: 'dept-1',
+      designationId: 'des-1',
+      managerId: 'EMP002',
+      role: 'employee',
+      salary: 82000,
+      status: 'active',
+      emergencyContact: '9876543225',
+      avatar: 'VI',
+    },
+    {
+      id: 'EMP009',
+      name: 'Neha Gupta',
+      email: 'neha.gupta@revworkforce.com',
+      password: 'password123',
+      phone: '9876543226',
+      address: '56 Banerghatta Road, Bangalore',
+      dob: '1993-04-15',
+      joiningDate: '2019-04-15',
+      departmentId: 'dept-4',
+      designationId: 'des-7',
+      managerId: 'EMP005',
+      role: 'employee',
+      salary: 70000,
+      status: 'active',
+      emergencyContact: '9876543227',
+      avatar: 'NG',
+    },
+    {
+      id: 'EMP010',
+      name: 'Arjun Menon',
+      email: 'arjun.menon@revworkforce.com',
+      password: 'password123',
+      phone: '9876543228',
+      address: '14 Electronic City, Bangalore',
+      dob: '1987-10-02',
+      joiningDate: '2016-10-02',
+      departmentId: 'dept-3',
+      designationId: 'des-6',
+      managerId: 'EMP001',
+      role: 'employee',
+      salary: 90000,
+      status: 'active',
+      emergencyContact: '9876543229',
+      avatar: 'AM',
+    },
+  ],
+  leaveBalances: {
+    EMP002: { CL: 12, SL: 10, PL: 15 },
+    EMP003: { CL: 10, SL: 8, PL: 12 },
+    EMP004: { CL: 11, SL: 9, PL: 13 },
+    EMP005: { CL: 12, SL: 10, PL: 15 },
+    EMP006: { CL: 9, SL: 7, PL: 11 },
+    EMP007: { CL: 12, SL: 10, PL: 15 },
+  },
+  leaveApplications: [
+    {
+      id: 'LEAVE001',
+      employeeId: 'EMP003',
+      type: 'CL',
+      fromDate: '2026-03-10',
+      toDate: '2026-03-12',
+      reason: 'Personal work',
+      status: 'approved',
+      managerComment: 'Approved. Enjoy!',
+      appliedOn: '2026-03-01',
+    },
+    {
+      id: 'LEAVE002',
+      employeeId: 'EMP004',
+      type: 'SL',
+      fromDate: '2026-02-20',
+      toDate: '2026-02-21',
+      reason: 'Fever and flu',
+      status: 'approved',
+      managerComment: 'Take care!',
+      appliedOn: '2026-02-19',
+    },
+    {
+      id: 'LEAVE003',
+      employeeId: 'EMP003',
+      type: 'PL',
+      fromDate: '2026-04-01',
+      toDate: '2026-04-05',
+      reason: 'Family vacation',
+      status: 'pending',
+      managerComment: '',
+      appliedOn: '2026-03-15',
+    },
+  ],
+  holidays: [
+    { id: 'HOL2025-01', name: 'Republic Day', date: '2025-01-26', type: 'national' },
+    { id: 'HOL2025-02', name: 'Holi', date: '2025-03-14', type: 'festival' },
+    { id: 'HOL2025-03', name: 'Independence Day', date: '2025-08-15', type: 'national' },
+    { id: 'HOL2025-04', name: 'Diwali', date: '2025-10-21', type: 'festival' },
+    { id: 'HOL2025-05', name: 'Christmas', date: '2025-12-25', type: 'national' },
+    { id: 'HOL001', name: 'Republic Day', date: '2026-01-26', type: 'national' },
+    { id: 'HOL002', name: 'Holi', date: '2026-03-25', type: 'festival' },
+    { id: 'HOL003', name: 'Good Friday', date: '2026-04-03', type: 'national' },
+    { id: 'HOL004', name: 'Eid ul-Fitr', date: '2026-03-31', type: 'festival' },
+    { id: 'HOL005', name: 'Independence Day', date: '2026-08-15', type: 'national' },
+    { id: 'HOL006', name: 'Gandhi Jayanti', date: '2026-10-02', type: 'national' },
+    { id: 'HOL007', name: 'Diwali', date: '2026-10-20', type: 'festival' },
+    { id: 'HOL008', name: 'Christmas', date: '2026-12-25', type: 'national' },
+    { id: 'HOL2027-01', name: 'Republic Day', date: '2027-01-26', type: 'national' },
+    { id: 'HOL2027-02', name: 'Holi', date: '2027-03-06', type: 'festival' },
+    { id: 'HOL2027-03', name: 'Independence Day', date: '2027-08-15', type: 'national' },
+    { id: 'HOL2027-04', name: 'Diwali', date: '2027-11-08', type: 'festival' },
+    { id: 'HOL2027-05', name: 'Christmas', date: '2027-12-25', type: 'national' },
+  ],
+  performanceReviews: [
+    {
+      id: 'PR001',
+      employeeId: 'EMP003',
+      year: 2025,
+      status: 'reviewed',
+      deliverables: 'Delivered the API gateway migration on time. Completed 3 major feature modules.',
+      accomplishments: 'Reduced API latency by 40%. Mentored 2 junior developers.',
+      improvements: 'Need to improve documentation practices and cross-team communication.',
+      selfRating: 4,
+      managerFeedback: 'James has shown excellent technical growth this year. Continue to improve soft skills.',
+      managerRating: 4,
+      submittedOn: '2026-01-10',
+      reviewedOn: '2026-01-20',
+    },
+    {
+      id: 'PR002',
+      employeeId: 'EMP004',
+      year: 2025,
+      status: 'submitted',
+      deliverables: 'Led the frontend rebuild using React. Delivered the design system.',
+      accomplishments: 'Improved page load speed by 60%. Introduced component storybook.',
+      improvements: 'Improve backend knowledge and DevOps familiarity.',
+      selfRating: 5,
+      managerFeedback: '',
+      managerRating: null,
+      submittedOn: '2026-01-12',
+      reviewedOn: null,
+    },
+  ],
+  goals: [
+    {
+      id: 'GOAL001',
+      employeeId: 'EMP003',
+      description: 'Complete AWS Solutions Architect certification',
+      deadline: '2026-06-30',
+      priority: 'high',
+      successMetrics: 'Pass the SAA-C03 exam with 80%+ score',
+      progress: 60,
+      status: 'in_progress',
+      year: 2026,
+    },
+    {
+      id: 'GOAL002',
+      employeeId: 'EMP003',
+      description: 'Lead the microservices migration project',
+      deadline: '2026-09-30',
+      priority: 'high',
+      successMetrics: 'Migrate 5 core services to microservices architecture',
+      progress: 20,
+      status: 'in_progress',
+      year: 2026,
+    },
+    {
+      id: 'GOAL003',
+      employeeId: 'EMP004',
+      description: 'Launch the new design system v2.0',
+      deadline: '2026-05-31',
+      priority: 'medium',
+      successMetrics: 'All 50+ components documented and published to npm',
+      progress: 75,
+      status: 'in_progress',
+      year: 2026,
+    },
+  ],
+  notifications: [
+    {
+      id: 'NOTIF001',
+      userId: 'EMP003',
+      type: 'leave_approved',
+      message: 'Your Casual Leave application (Mar 10-12) has been approved.',
+      read: false,
+      createdAt: '2026-03-02T10:30:00Z',
+    },
+    {
+      id: 'NOTIF002',
+      userId: 'EMP002',
+      type: 'leave_applied',
+      message: 'James Carter has applied for Paid Leave (Apr 1-5). Action required.',
+      read: false,
+      createdAt: '2026-03-15T09:00:00Z',
+    },
+    {
+      id: 'NOTIF003',
+      userId: 'EMP002',
+      type: 'review_submitted',
+      message: 'Priya Sharma has submitted her 2025 Performance Review.',
+      read: false,
+      createdAt: '2026-01-12T14:00:00Z',
+    },
+    {
+      id: 'NOTIF004',
+      userId: 'EMP004',
+      type: 'review_feedback',
+      message: 'Your 2025 Performance Review is pending manager feedback.',
+      read: false,
+      createdAt: '2026-01-13T08:00:00Z',
+    },
+  ],
+  announcements: [
+    {
+      id: 'ANN001',
+      title: 'Office Renovation - Floor 3 Closed',
+      content: 'Floor 3 will be closed for renovation from March 20-25. Please work from floors 1 or 2.',
+      date: '2026-03-10',
+      priority: 'high',
+    },
+    {
+      id: 'ANN002',
+      title: 'Q1 2026 All Hands Meeting',
+      content: 'Join us for the Q1 All Hands Meeting on March 28th at 3 PM in the main auditorium.',
+      date: '2026-03-05',
+      priority: 'medium',
+    },
+    {
+      id: 'ANN003',
+      title: 'New Health Insurance Benefits',
+      content: 'Enhanced health coverage is now available. Check the HR portal for details and enrollment.',
+      date: '2026-02-28',
+      priority: 'low',
+    },
+  ],
+  attendanceRecords: [],
+  trainings: [],
+  trainingEnrollments: [],
+  onboardingTemplates: [],
+  onboardingInstances: [],
+  offboardingRequests: [],
+  offboardingChecklists: [],
+};
+
